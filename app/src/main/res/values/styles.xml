@@ -10,4 +10,9 @@
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorVerdelimao</item>
     </style>
 
+    <style name="Fade">
+        <item name="android:windowEnterAnimation">@anim/slide_right</item>
+       <item name="android:windowExitAnimation">@anim/slide_right</item>
+    </style>
+
 </resources>

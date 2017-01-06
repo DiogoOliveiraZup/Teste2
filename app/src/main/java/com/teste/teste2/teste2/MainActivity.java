@@ -1,6 +1,7 @@
 package com.teste.teste2.teste2;
 
 import android.app.Application;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.os.AsyncTaskCompat;
@@ -20,6 +21,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.teste.teste2.teste2.model.MovieInformations;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +35,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -152,8 +157,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void URLResponse(){
+       // searchText.setText(returnedText);
 
-        searchText.setText(returnedText);
+        overridePendingTransition(R.anim.slide_right, R.anim.slide_right);
+
+        Intent myIntent = new Intent(this, SearchResultActivity.class);
+        myIntent.putExtra("resultSend", returnedText); //Optional parameters // Passar variavel para a outra activity
+       this.startActivity(myIntent);
     }
 
     public void resetSearchText(){
@@ -242,24 +252,47 @@ public class MainActivity extends AppCompatActivity {
                //searchText.setText(buffer.toString());
 
 
-                //returnedText = buffer.toString();
+
+                /*
+                Iterator<String> iter = movieInfo.keys();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    Log.i("JSON Quantidade", key);
+                    try {
+                        Object value = movieInfo.get(key);
+                    } catch (JSONException e) {
+                        // Something went wrong!
+                    }
+                }
+                */
+
 
                 JSONObject movieInfo = new JSONObject(buffer.toString());
-                //String title = movieInfo.getString("Title");
-                String finalString = null;
+                 Gson gson = new GsonBuilder().create();
 
-                for (int i = 0; i < movieInfo.length(); i++){
+                MovieInformations movie = gson.fromJson(movieInfo.toString(),MovieInformations.class);
 
-                    //finalString = movieInfo.getJSONArray());
-
-                }
-
-
-
-                Log.i("JSON Response", finalString);
+                returnedText =
+                "Titulo: " + movie.getTitle() + "\n" +
+                "Year: " + movie.getYear() + "\n" +
+                "Rated: " + movie.getRated() + "\n" +
+                "Released: " + movie.getReleased()+ "\n" +
+                "Runtime: " + movie.getRuntime() + "\n" +
+                "Genre: " + movie.getGenre() + "\n" +
+                "Director: " + movie.getDirector() + "\n" +
+                "Writer: " + movie.getWriter() + "\n" +
+                "Actors: " + movie.getActors() + "\n" +
+                "Plot: " + movie.getPlot() + "\n" +
+                "Language: " + movie.getLanguage() + "\n" +
+                "Country: " + movie.getCountry() + "\n" +
+                "Awards: " + movie.getAwards() + "\n" +
+                "Metascore: " + movie.getMetascore() + "\n" +
+                "imdbRating: " + movie.getImdbRating() + "\n" +
+                "imdbVote: " + movie.getImdbVotes() + "\n" +
+                "Type: " + movie.getType();
 
                 //returnedText = movieInfo.getJSONObject("Title").toString() + "Filme Procurado";
-
+                // Retrofit //
                 // A unica maneira de alterar algo na UI e usando este codigo assim foi possivel altear a variavel EditText do MainActivity e claro chamar uma funcao na classe principal //
                 runOnUiThread(new Runnable() {
                     @Override
@@ -267,8 +300,6 @@ public class MainActivity extends AppCompatActivity {
                         URLResponse();
                     }
                 });
-
-
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
