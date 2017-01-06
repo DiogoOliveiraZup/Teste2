@@ -4,29 +4,36 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorGrayBackground"
     android:orientation="vertical"> <!-- Nao esquecer da orientacao -->
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorGrayBackground"
+        android:paddingTop="10dp"
+        >
+
+
+        <!--
+        android:imeOptions="actionDone" // Adiciona o botao OK no teclado nativo
+        android:inputType="text" // Modifica o tipo de input para texto, assim ele mantem em linha reta (Pode ser usado para senha)
+        -->
 
         <EditText
             android:id="@+id/searchField"
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_toLeftOf="@+id/searchButton"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_height="wrap_content"
+            android:text="Digite aqui o filme que procura..."
+            android:textColor="@color/colorVerdelimao"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             />
 
 
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_marginRight="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ok"/>
 
     </RelativeLayout>
 
@@ -38,7 +45,7 @@
         android:text="Meus Filmes"
         android:gravity="center"
         android:textStyle="bold"
-        android:textColor="@color/colorverdelimao"
+        android:textColor="@color/colorVerdelimao"
         android:textSize="24sp"/>  <!-- Texto sempre trabalha com sp -->
 
     <ImageView
