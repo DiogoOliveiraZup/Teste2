@@ -71,7 +71,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Apontar para o XML da Acivity
 
-        baseTeste = new BaseTeste();
 
         // Evita que o teclado abra quando tiver um ScrollView //
         getWindow().setSoftInputMode(
@@ -366,13 +365,15 @@ public class MainActivity extends FragmentActivity {
 
         // Aqui eu chamo a minha Classe customizada e digo se é para salvar algo no layout atual ou reiniciar o layoyt // O Android sempre recria a Activity após um evento
         Bundle savedInstanceState = null;
-        quantity = 2;
+        quantity = 10;
         LayoutInflater inflater;
         inflater = LayoutInflater.from(this);
         ViewGroup parent = (ViewGroup) findViewById(R.id.mainTable);
 
-        baseTeste.onCreateView(inflater, parent, savedInstanceState, quantity);
-
+        for (int i = 0; i < quantity; i++) {
+            baseTeste = new BaseTeste();
+            baseTeste.onCreateView(inflater, parent, savedInstanceState);
+        }
 
     }
 
