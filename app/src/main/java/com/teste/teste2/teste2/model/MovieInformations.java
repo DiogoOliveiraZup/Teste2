@@ -35,6 +35,10 @@ public class MovieInformations {
         return Year;
     }
 
+    public String getType() {
+        return Type;
+    }
+
     public String getRated() {
             return Rated;
         }
@@ -101,10 +105,6 @@ public class MovieInformations {
 
     public String getResponse() {
         return Response;
-    }
-
-    public String getType() {
-        return Type;
     }
 
     public void setTitle(String title) {

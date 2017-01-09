@@ -49,25 +49,11 @@
         android:textColor="@color/colorVerdelimao"
         android:textSize="24sp"/>   Texto sempre trabalha com sp -->
 
-    <ScrollView
-        android:id="@+id/principalmenuScroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <TableLayout
-        android:id="@+id/mainTable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true">
-
-   <!-- Custom Layout here -->
-
-
-    </TableLayout>
-
-
-
-    </ScrollView>
+   <ListView
+       android:id="@+id/mainTable"
+       android:layout_width="match_parent"
+       android:layout_height="fill_parent">
+   </ListView>
 
 
 
