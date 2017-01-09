@@ -37,6 +37,7 @@
 
     </RelativeLayout>
 
+    <!--
     <TextView
         android:id="@+id/textMyMovies"
         android:layout_width="match_parent"
@@ -46,13 +47,28 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textColor="@color/colorVerdelimao"
-        android:textSize="24sp"/>  <!-- Texto sempre trabalha com sp -->
+        android:textSize="24sp"/>   Texto sempre trabalha com sp -->
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/principalmenuScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/mainTable"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
 
-        />
+   <!-- Custom Layout here -->
+
+
+    </TableLayout>
+
+
+
+    </ScrollView>
+
 
 
 
