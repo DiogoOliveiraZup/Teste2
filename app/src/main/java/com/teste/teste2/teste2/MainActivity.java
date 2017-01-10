@@ -8,6 +8,8 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,9 +28,13 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.teste.teste2.teste2.adapter.Adapter;
+import com.teste.teste2.teste2.adapter.AdapterSearch;
 import com.teste.teste2.teste2.model.BaseTeste;
 import com.teste.teste2.teste2.model.MovieInformations;
+import com.teste.teste2.teste2.model.MovieSearchInfomations;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +51,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.teste.teste2.teste2.R.id.MovieShortStatus;
 import static com.teste.teste2.teste2.R.id.searchField;
@@ -65,6 +73,17 @@ public class MainActivity extends FragmentActivity {
 
     private int returnedResults;
 
+    private Boolean firstime;
+
+    private String omdbURLQuickSearch;
+
+    private ListView moviesListView;
+    private MovieSearchInfomations movieSearchInfomations;
+    AdapterSearch adapterSearch;
+    String url = "http://www.omdbapi.com/?s=ice&y=&plot=short&r=json";
+    Gson gson;
+    AsyncHttpClient client2;
+
 
     private List<MovieInformations> listAnotacao;
 
@@ -81,6 +100,8 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main); // Apontar para o XML da Acivity
 
 
+        moviesListView = (ListView) findViewById(R.id.mainTable);
+
         // Evita que o teclado abra quando tiver um ScrollView //
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -89,18 +110,82 @@ public class MainActivity extends FragmentActivity {
         listAnotacao = new ArrayList<>();
         adapter = new Adapter(this, listAnotacao);
 
-        // não esquecer de setar o adapter na lista //
-        notesList.setAdapter(adapter);
-
         //searchButton = (Button) findViewById(R.id.searchButton);
         searchText = (EditText) findViewById(searchField);
+
+        firstime = false;
 
         searchText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetSearchText();
+
+                if (!firstime){
+                    firstime = true;
+                    searchText.setText("");
+                }
+
+
             }
         });
+
+   searchText.addTextChangedListener(new TextWatcher() {
+       @Override
+       public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+           Log.i("Befora", "Before");
+
+           if (s.length() > 2 && firstime) {
+               moviesListView.setAdapter(null);
+               adapterSearch = new AdapterSearch(MainActivity.this,null);
+               adapterSearch.notifyDataSetChanged();
+
+           }
+       }
+
+       @Override
+       public void onTextChanged(CharSequence s, int start, int before, int count) {
+           Log.i("Change", "Change");
+       }
+
+       @Override
+       public void afterTextChanged(Editable s) {
+           Log.i("Finish", "Finish");
+
+           if (s.length() > 2 && firstime) {
+
+               omdbURLQuickSearch = searchText.getText().toString();
+               omdbURLQuickSearch = omdbURLQuickSearch.replaceAll(" ", "+");
+               omdbURLQuickSearch = "https://www.omdbapi.com/?s=" + omdbURLQuickSearch + "&y=&plot=full&r=json";
+
+               client2 = new AsyncHttpClient();
+               client2.get(MainActivity.this, omdbURLQuickSearch, new AsyncHttpResponseHandler() {
+                   @Override
+                   public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                       String response = new String(responseBody);
+                       gson = new Gson();
+                       movieSearchInfomations = gson.fromJson(response, MovieSearchInfomations.class);
+                       Log.i("Etapa", "1");
+                       if (movieSearchInfomations.getSearch() != null) {
+                           adapterSearch = new AdapterSearch(MainActivity.this, movieSearchInfomations.getSearch());
+                           Log.i("Etapa", "2");
+                           // Sempre setar o adapter //
+                           moviesListView.setAdapter(adapterSearch);
+                       }
+
+                       Log.i("Etapa", "3");
+
+                       //
+                   }
+
+                   @Override
+                   public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+                   }
+               });
+
+
+           }
+       }
+   });
 
         searchText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -133,7 +218,7 @@ public class MainActivity extends FragmentActivity {
 
             String movieDigited;
             movieDigited = searchText.getText().toString();
-            movieDigited = "https://www.omdbapi.com/?s=" + movieDigited.replaceAll(" ", "+") + "&y=&plot=full&r=json"; // Se nao usar o HTTPS fecha o app na hora com esse erro java.lang.ClassCastException: com.android.okhttp.internal.huc.HttpURLConnectionImpl cannot be cast to javax.net.ssl.HttpsURLConnection
+            movieDigited = "https://www.omdbapi.com/?t=" + movieDigited.replaceAll(" ", "+") + "&y=&plot=full&r=json"; // Se nao usar o HTTPS fecha o app na hora com esse erro java.lang.ClassCastException: com.android.okhttp.internal.huc.HttpURLConnectionImpl cannot be cast to javax.net.ssl.HttpsURLConnection
             new JSONTask().execute(movieDigited);
 
         /*
@@ -299,36 +384,16 @@ public class MainActivity extends FragmentActivity {
                     buffer.append(line);
                 }
 
-
                 final JSONObject movieInfo = new JSONObject(buffer.toString());
                 final Gson gson = new GsonBuilder().create();
 
-                String testString = (String) movieInfo.get("Title"); // Buscar uma Key de um JSON
-
-
-                JSONArray outerArr = new JSONArray("Search");
-
-                for(int ictr =0; ictr<outerArr.length() ; ictr++)
-                {
-                    JSONObject obj = outerArr.getJSONObject(ictr);
-                    String id = obj.getString("Title");
-                    String erporder_erpid=obj.getString("erporder_erpid");
-                    String dtStart=obj.getString("dtStart");
-
-                    Log.i("Teste222222222222222222222222: ", Integer.toString(ictr));
-                }
-
+                //String testString = (String) movieInfo.get("Title"); // Buscar uma Key de um JSON
 
                 //String CurrentString = "Fruit: they taste good";
                 //String[] separated = CurrentString.split(":");
 
 
-                Log.i("Teste: ", testString);
-
                 returnedResults = 3;
-
-                if (returnedResults > 2) {
-
 
                     for (int i = 0; i < returnedResults; i++) {
 
@@ -341,6 +406,10 @@ public class MainActivity extends FragmentActivity {
                             public void run() {
 
                                 listAnotacao.add(movie); // Adiciona os textos digitados na array
+
+                                // não esquecer de setar o adapter na lista (SOMENTE SETAR DEPOIS DE UMA ALTERACAO NA LISTA)//
+                                notesList.setAdapter(adapter);
+
                                 adapter.notifyDataSetChanged();
 
                                 returnedText =
@@ -364,9 +433,6 @@ public class MainActivity extends FragmentActivity {
 
                             }
                         });
-
-                    }
-
                 }
 
                 //returnedText = movieInfo.getJSONObject("Title").toString() + "Filme Procurado";
