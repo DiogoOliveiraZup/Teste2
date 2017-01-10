@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -187,10 +188,14 @@ public class MainActivity extends FragmentActivity {
        }
    });
 
+        // Adiciona o botao OK no teclado nativo //
+        /*
         searchText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        */
+        ///////////////////////////////////////////
 
         // Detecta se o usuario clicou no botao OK do teclado que esta setado no xml do EditText
-        searchText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+        /*searchText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -201,18 +206,14 @@ public class MainActivity extends FragmentActivity {
                 return false;
             }
 
-        });
-
-
-        // Adiciona item para a Lista //
-
+        });*/
+        //////////////////////////////////////////////////////////////////////////////////////////
 
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
 
     public void finishedInputMovie(){
 
@@ -221,51 +222,7 @@ public class MainActivity extends FragmentActivity {
             movieDigited = "https://www.omdbapi.com/?t=" + movieDigited.replaceAll(" ", "+") + "&y=&plot=full&r=json"; // Se nao usar o HTTPS fecha o app na hora com esse erro java.lang.ClassCastException: com.android.okhttp.internal.huc.HttpURLConnectionImpl cannot be cast to javax.net.ssl.HttpsURLConnection
             new JSONTask().execute(movieDigited);
 
-        /*
-
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-
-        try {
-            URL url = new URL(movieDigited);
-            connection = (HttpsURLConnection) url.openConnection();
-            connection.connect();
-
-
-            InputStream stream = connection.getInputStream();
-
-            reader = new BufferedReader(new InputStreamReader(stream));
-
-            StringBuffer buffer =  new StringBuffer();
-
-            String line = "";
-            while ((line = reader.readLine()) != null){
-                buffer.append(line);
-            }
-
-            searchText.setText(buffer.toString());
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        */
-
-        //searchText.setText(movieDigited);
+          //searchText.setText(movieDigited);
 
     }
 
@@ -280,11 +237,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void resetSearchText(){
-
         searchText.setText("");
-
     }
-
 
     public void teste(){
 
@@ -297,7 +251,6 @@ public class MainActivity extends FragmentActivity {
                 .show();
 
     }
-
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.

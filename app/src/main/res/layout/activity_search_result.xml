@@ -3,90 +3,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorGrayBackground"
-    android:orientation="vertical"> <!-- Nao esquecer da orientacao -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"></RelativeLayout>
+    android:layout_height="match_parent"> <!-- Nao esquecer da orientacao -->
 
     <ImageView
-        android:id="@+id/searchBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@mipmap/failed"
-        android:alpha="0.2"/>
+        android:id="@+id/searchBackground"
+        android:scaleType="centerCrop"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#9d000000"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout">
-
-
-        <ImageButton
-            android:id="@+id/favoriteButton"
-            android:layout_height="110dp"
-            android:layout_width="110dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            android:layout_gravity="left"
-
-            android:onClick="scrollToTop"
-            android:background="@mipmap/favorite"
-            />
-
-        <ImageButton
-            android:id="@+id/shareButton"
-            android:layout_height="110dp"
-            android:layout_width="110dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="160dp"
-            android:layout_gravity="left"
-
-           android:onClick="scrollToTop"
-            android:background="@mipmap/share"
-            />
-
-
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/searchMiniatura"
-        android:layout_width="175dp"
-        android:layout_height="220dp"
-
-        android:src="@mipmap/failed"
-        android:layout_marginTop="35dp"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/relativeLayout"
-        android:layout_toEndOf="@+id/relativeLayout" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="280dp">
-
-        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/resultText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:textColor="@color/colorVerdelimao"
-         />
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true">
 
 
-        </ScrollView>
+            <ImageView
+                android:id="@+id/searchMiniatura"
+                android:layout_width="175dp"
+                android:layout_height="220dp"
+                android:src="@mipmap/failed"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/relativeLayout"
+                android:layout_toEndOf="@+id/relativeLayout" />
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="280dp">
 
+
+
+                <TextView
+                    android:id="@+id/resultText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:textColor="@color/colorVerdelimao"
+                    />
+
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/relativeLayout"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+
+                <ImageButton
+                    android:id="@+id/favoriteButton"
+                    android:layout_height="110dp"
+                    android:layout_width="110dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_gravity="left"
+
+                    android:onClick="scrollToTop"
+                    android:background="@mipmap/favorite"
+                    />
+
+                <ImageButton
+                    android:id="@+id/shareButton"
+                    android:layout_height="110dp"
+                    android:layout_width="110dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="160dp"
+                    android:layout_gravity="left"
+
+                    android:onClick="scrollToTop"
+                    android:background="@mipmap/share"
+                    />
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
