@@ -32,6 +32,7 @@ import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.teste.teste2.teste2.adapter.Adapter;
+import com.teste.teste2.teste2.adapter.AdapterFavorites;
 import com.teste.teste2.teste2.adapter.AdapterSearch;
 import com.teste.teste2.teste2.model.BaseTeste;
 import com.teste.teste2.teste2.model.MovieInformations;
@@ -86,6 +87,9 @@ public class MainActivity extends FragmentActivity {
     AsyncHttpClient client2;
 
 
+    private ListView favoritesList;
+    private AdapterFavorites adapterFavorites;
+
     private List<MovieInformations> listAnotacao;
 
     /**
@@ -99,6 +103,13 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Apontar para o XML da Acivity
+
+
+        // Parei aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii //
+        favoritesList = (ListView) findViewById(R.id.mainTable2);
+        adapterFavorites = new AdapterFavorites(MainActivity.this, movieSearchInfomations.getSearch());
+        // Sempre setar o adapter //
+        favoritesList.setAdapter(adapterFavorites);
 
 
         moviesListView = (ListView) findViewById(R.id.mainTable);

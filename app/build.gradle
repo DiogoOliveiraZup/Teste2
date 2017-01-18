@@ -37,5 +37,4 @@ dependencies {
     // Picaso to Image //
     compile 'com.squareup.picasso:picasso:2.5.2'
 
-
 }
