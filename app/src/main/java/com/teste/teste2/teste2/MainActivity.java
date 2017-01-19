@@ -337,7 +337,7 @@ public class MainActivity extends FragmentActivity {
             Log.i("MoviesID", allMoviesID);
             allMoviesIDSplited = allMoviesID.split(",");
 
-            allTitles = pref2.getString("titles", "");
+            allTitles = pref2.getString("allTitles", "");
             allTitlesSplited = allTitles.split(",");
 
             allMoviesIDHaveValue = true;
@@ -371,7 +371,7 @@ public class MainActivity extends FragmentActivity {
                 //////////////////////////////////
 
                 // Criando e adicionando um item na lista somente para Teste //
-                FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i]);
+                FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i]); // Preciso fazer a array de Titulos
                 lista.add(filme);
                 ///////////////////////////////////////////////////////////////
 

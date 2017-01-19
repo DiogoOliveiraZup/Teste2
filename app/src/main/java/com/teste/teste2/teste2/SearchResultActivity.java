@@ -43,6 +43,9 @@ public class SearchResultActivity extends AppCompatActivity {
     ImageView miniatureMovie;
     ImageView backgroundMovie;
     String title;
+    String id;
+
+    boolean isFavorite;
 
     String allMoviesID;
     String allTitles;
@@ -75,10 +78,13 @@ public class SearchResultActivity extends AppCompatActivity {
         manageFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    manageFavorites();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                if (!isFavorite) {
+                    try {
+                        manageFavorites();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -101,6 +107,9 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         result = intent.getStringExtra("resultSend"); //if it's a string you stored.
         title = intent.getStringExtra("title");
+        id = intent.getStringExtra("imdbID");
+
+        Log.i("Title", title);
 
         resultText.setText(result);
 
@@ -164,7 +173,17 @@ public class SearchResultActivity extends AppCompatActivity {
         if (pref2.contains("allMoviesID")){
             allMoviesID = pref2.getString("allMoviesID", null);
             Log.i("MoviesID", allMoviesID);
-            allTitles = pref2.getString("titles", "");
+            allTitles = pref2.getString("allTitles", null);
+            Log.i("AllTitles", allTitles);
+
+            if (allMoviesID.contains(id)){
+                isFavorite = true;
+                manageFavorite.setBackgroundResource(R.mipmap.isfavorite);
+            }
+            else{
+                isFavorite = false;
+            }
+
         }
         else{
             allMoviesID = "";
@@ -173,17 +192,7 @@ public class SearchResultActivity extends AppCompatActivity {
         }
         /////////////////////////////////////////////////////////////////////////////
 
-        // Verifico se contem a chave no meu SharedPreferences com o valor allMoviesID e se tiver o valor eu seto da chave na String //
-        if (pref2.contains("allTitles")){
-            allTitles = pref2.getString("allTitles", null);
-            Log.i("allTitles", allMoviesID);
-        }
-        else{
-            allTitles = "";
-            Log.i("allTitles", "Nao Encontrada");
-        }
-        /////////////////////////////////////////////////////////////////////////////
-    }
+   }
 
     // Eu chamo essa funcao quando o Usuario tocar no botao de Favoritos //
     Bitmap manageFavorites() throws IOException {
@@ -251,11 +260,9 @@ public class SearchResultActivity extends AppCompatActivity {
         String resultDescription = intent.getStringExtra("resultSend"); //if it's a string you stored.
         editor.putString(intentIMDBID, resultDescription); // Salvando a descrição do Filme //
 
-        allTitles = allTitles + title;
-
         editor.putString("allMoviesID", allMoviesID + intentIMDBID + ",");
 
-        editor.putString("titles", allTitles + ",");
+        editor.putString("allTitles", allTitles + title + ",");
 
         editor.putString(intentIMDBID+"LinkImage", f.toString()); // Salvando o caminho da imagem
         editor.commit(); // Sempre usar isso para salvar após uma alteração
