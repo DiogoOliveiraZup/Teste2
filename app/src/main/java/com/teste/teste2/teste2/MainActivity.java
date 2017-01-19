@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ import com.teste.teste2.teste2.adapter.Adapter;
 import com.teste.teste2.teste2.adapter.AdapterFavorites;
 import com.teste.teste2.teste2.adapter.AdapterSearch;
 import com.teste.teste2.teste2.model.BaseTeste;
+import com.teste.teste2.teste2.model.FavoritesInformations;
 import com.teste.teste2.teste2.model.MovieInformations;
 import com.teste.teste2.teste2.model.MovieSearchInfomations;
 
@@ -89,6 +92,7 @@ public class MainActivity extends FragmentActivity {
 
     private ListView favoritesList;
     private AdapterFavorites adapterFavorites;
+    private String[] listaNomes = {"Diogo", "Diogo2", "Diogo3", "Diogo4"};
 
     private List<MovieInformations> listAnotacao;
 
@@ -106,10 +110,27 @@ public class MainActivity extends FragmentActivity {
 
 
         // Parei aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii //
+
+        ArrayList<FavoritesInformations> lista = new ArrayList<FavoritesInformations>();
+
+        FavoritesInformations filme1 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo");
+        FavoritesInformations filme2 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo 2");
+        FavoritesInformations filme3 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo3");
+        FavoritesInformations filme4 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo 4");
+
+        lista.add(filme1);
+        lista.add(filme2);
+        lista.add(filme3);
+        lista.add(filme4);
+
+        AdapterFavorites adapterFavorites = new AdapterFavorites(this, lista);
         favoritesList = (ListView) findViewById(R.id.mainTable2);
-        adapterFavorites = new AdapterFavorites(MainActivity.this, movieSearchInfomations.getSearch());
-        // Sempre setar o adapter //
+
         favoritesList.setAdapter(adapterFavorites);
+
+        //adapterFavorites = new AdapterFavorites(MainActivity.this, movieSearchInfomations.getSearch());
+        // Sempre setar o adapter //
+        //favoritesList.setAdapter(adaptador);
 
 
         moviesListView = (ListView) findViewById(R.id.mainTable);

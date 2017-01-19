@@ -31,6 +31,8 @@
             android:textColor="@color/colorVerdelimao"
             android:imeOptions="actionDone"
             android:inputType="text"
+            android:background="@color/colorPrimaryDark"
+            android:textCursorDrawable="@color/colorVerdelimao"
             />
 
     </RelativeLayout>
@@ -49,25 +51,46 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="215dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/colorPrimaryDark">
 
    <ListView
        android:id="@+id/mainTable"
+
        android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+       android:layout_height="wrap_content"
+       android:background="@color/colorPrimaryDark">
    </ListView>
+
+
 
     </RelativeLayout>
 
-        <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorVerdelimao">
+        android:text="Meus Filmes"
+        android:gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@color/colorVerdelimao"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    >
 
             <ListView
             android:id="@+id/mainTable2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/colorPrimaryDark"
+                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
             </ListView>
 
         </LinearLayout>
