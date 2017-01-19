@@ -91,8 +91,6 @@ public class MainActivity extends FragmentActivity {
 
 
     private ListView favoritesList;
-    private AdapterFavorites adapterFavorites;
-    private String[] listaNomes = {"Diogo", "Diogo2", "Diogo3", "Diogo4"};
 
     private List<MovieInformations> listAnotacao;
 
@@ -453,6 +451,7 @@ public class MainActivity extends FragmentActivity {
         }
 
         }
+
 
 }
 
