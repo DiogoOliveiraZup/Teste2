@@ -162,6 +162,7 @@ public class AdapterSearch extends BaseAdapter {
                     myIntent.putExtra("resultSend", returnedText); //Optional parameters // Passar variavel para a outra activity
                     myIntent.putExtra("posterURL", movie.getPoster());
                     myIntent.putExtra("imdbID", movie.getImdbID());
+                    myIntent.putExtra("title", movie.getTitle());
                 context.startActivity(myIntent);
 
 

@@ -60,7 +60,7 @@ public class AdapterFavorites extends ArrayAdapter<FavoritesInformations> {
 
         // Pegando do Script Miniature Informations//
         ImageButton miniatureMovie = (ImageButton)convertView.findViewById(R.id.miniatureMovie);
-        miniatureMovie.setImageResource(itemPosicao.getMovieMiniature());
+        miniatureMovie.setImageBitmap(itemPosicao.getMovieMiniature());
 
         TextView textTitle = (TextView)convertView.findViewById(R.id.textTitle);
         textTitle.setText(itemPosicao.getTitle());

@@ -2,28 +2,22 @@ package com.teste.teste2.teste2;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -41,11 +35,11 @@ import com.teste.teste2.teste2.model.FavoritesInformations;
 import com.teste.teste2.teste2.model.MovieInformations;
 import com.teste.teste2.teste2.model.MovieSearchInfomations;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,10 +53,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.teste.teste2.teste2.R.id.MovieShortStatus;
 import static com.teste.teste2.teste2.R.id.searchField;
-import static com.teste.teste2.teste2.R.id.textYear;
-import static com.teste.teste2.teste2.R.id.texttype;
 
 
 public class MainActivity extends FragmentActivity {
@@ -70,8 +61,6 @@ public class MainActivity extends FragmentActivity {
     //private Button searchButton;
     private EditText searchText;
     private String returnedText;
-    BaseTeste baseTeste;
-    int quantity;
 
     private ListView notesList;
     private Adapter adapter;
@@ -85,14 +74,21 @@ public class MainActivity extends FragmentActivity {
     private ListView moviesListView;
     private MovieSearchInfomations movieSearchInfomations;
     AdapterSearch adapterSearch;
-    String url = "http://www.omdbapi.com/?s=ice&y=&plot=short&r=json";
+
     Gson gson;
     AsyncHttpClient client2;
-
 
     private ListView favoritesList;
 
     private List<MovieInformations> listAnotacao;
+
+
+    // Controla a String com todos os Filmes //
+    String allMoviesID;
+    String[] allMoviesIDSplited;
+
+    String allTitles;
+    String[] allTitlesSplited;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -109,7 +105,7 @@ public class MainActivity extends FragmentActivity {
 
         // Parei aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii //
 
-        ArrayList<FavoritesInformations> lista = new ArrayList<FavoritesInformations>();
+       /* ArrayList<FavoritesInformations> lista = new ArrayList<FavoritesInformations>();
 
         FavoritesInformations filme1 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo");
         FavoritesInformations filme2 = new FavoritesInformations(R.mipmap.failed, "A Era do Gelo 2");
@@ -125,6 +121,7 @@ public class MainActivity extends FragmentActivity {
         favoritesList = (ListView) findViewById(R.id.mainTable2);
 
         favoritesList.setAdapter(adapterFavorites);
+        */
 
         //adapterFavorites = new AdapterFavorites(MainActivity.this, movieSearchInfomations.getSearch());
         // Sempre setar o adapter //
@@ -326,6 +323,79 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Variavel para receber um Shared Preferences //
+        SharedPreferences pref2 = getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        boolean allMoviesIDHaveValue;
+
+        // Verifico se contem a chave no meu SharedPreferences com o valor allMoviesID e se tiver o valor eu seto da chave na String //
+        if (pref2.contains("allMoviesID")){
+            allMoviesID = pref2.getString("allMoviesID", "");
+            Log.i("MoviesID", allMoviesID);
+            allMoviesIDSplited = allMoviesID.split(",");
+
+            allTitles = pref2.getString("titles", "");
+            allTitlesSplited = allTitles.split(",");
+
+            allMoviesIDHaveValue = true;
+        }
+        else{
+            allMoviesIDHaveValue = false;
+            allMoviesID = "";
+            allTitles = "";
+            Log.i("MoviesID", "Nao Encontrada");
+        }
+        /////////////////////////////////////////////////////////////////////////////
+
+        // Criando uma variável da minha lista //
+        ArrayList<FavoritesInformations> lista = new ArrayList<>();
+
+        if (allMoviesIDHaveValue) {
+
+            for (int i = 0; i < allMoviesIDSplited.length; i++) {
+
+
+                // Verifico se tem a Key dentro do Shared Preferences //
+                //if (pref2.contains("tt0268380")){
+                String resultTest = pref2.getString("tt0268380", null);
+                String folderTest = pref2.getString(allMoviesIDSplited[i] + "LinkImage", null);
+                //Log.i("Descricao Salva: ", resultTest);
+                // Log.i("Descricao Salva: ", folderTest);
+
+                // Pegando o Arquivo de imagem do SD Card //
+                File f = new File(folderTest);
+                Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+                //////////////////////////////////
+
+                // Criando e adicionando um item na lista somente para Teste //
+                FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i]);
+                lista.add(filme);
+                ///////////////////////////////////////////////////////////////
+
+                // Criando uma variável do meu adapter e setando o contexto e a lista completa no meu ListView //
+                AdapterFavorites adapterFavorites = new AdapterFavorites(this, lista);
+                favoritesList = (ListView) findViewById(R.id.mainTable2);
+                favoritesList.setAdapter(adapterFavorites);
+                adapterFavorites.notifyDataSetChanged();
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+                //}
+                // else{
+                // Log.i("Descricao Salva: ", "Nao Encontrado");
+                //}
+
+
+            }
+
+        }
+
+
+
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 
@@ -336,13 +406,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     public class JSONTask extends AsyncTask <String, String, String>{
-
-
-
-
-
-
-
 
         @Override
         protected String doInBackground(String... params) {

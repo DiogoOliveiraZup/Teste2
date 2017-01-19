@@ -1,5 +1,10 @@
 package com.teste.teste2.teste2.model;
 
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
+import java.io.File;
+
 /**
  * Created by Computador on 18/01/2017.
  */
@@ -10,19 +15,19 @@ package com.teste.teste2.teste2.model;
 
 public class FavoritesInformations {
 
-    int movieMiniature;
+    Bitmap movieMiniature;
     String Title;
 
-    public FavoritesInformations(int movieMiniature, String title) {
+    public FavoritesInformations(Bitmap movieMiniature, String title) {
         this.movieMiniature = movieMiniature;
         Title = title;
     }
 
-    public int getMovieMiniature() {
+    public Bitmap getMovieMiniature() {
         return movieMiniature;
     }
 
-    public void setMovieMiniature(int movieMiniature) {
+    public void setMovieMiniature(Bitmap movieMiniature) {
         this.movieMiniature = movieMiniature;
     }
 
