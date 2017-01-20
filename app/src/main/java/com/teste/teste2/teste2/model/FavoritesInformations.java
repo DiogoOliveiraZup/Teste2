@@ -18,9 +18,14 @@ public class FavoritesInformations {
     Bitmap movieMiniature;
     String Title;
 
-    public FavoritesInformations(Bitmap movieMiniature, String title) {
+    String movieID;
+    String description;
+
+    public FavoritesInformations(Bitmap movieMiniature, String title, String movieID, String description) {
         this.movieMiniature = movieMiniature;
         Title = title;
+        this.movieID = movieID;
+        this.description = description;
     }
 
     public Bitmap getMovieMiniature() {
@@ -37,5 +42,21 @@ public class FavoritesInformations {
 
     public void setTitle(String title) {
         Title = title;
+    }
+
+    public String getMovieID() {
+        return movieID;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setMovieID(String movieID) {
+        this.movieID = movieID;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

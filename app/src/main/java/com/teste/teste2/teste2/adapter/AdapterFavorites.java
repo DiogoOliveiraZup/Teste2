@@ -2,6 +2,7 @@ package com.teste.teste2.teste2.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Computador on 10/01/2017.
@@ -65,6 +68,28 @@ public class AdapterFavorites extends ArrayAdapter<FavoritesInformations> {
         TextView textTitle = (TextView)convertView.findViewById(R.id.textTitle);
         textTitle.setText(itemPosicao.getTitle());
 
+        final String movieID = itemPosicao.getMovieID();
+        final String description = itemPosicao.getDescription();
+
+
+        miniatureMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Enviado uma informação para a Activity qye vai ser carregada //
+
+                boolean openByFavorites = true;
+                Intent myIntent = new Intent(context, SearchResultActivity.class);
+                myIntent.putExtra("description", description); //Optional parameters // Passar variavel para a outra activity
+                myIntent.putExtra("posterLocalURL", movieID);
+                myIntent.putExtra("openByFavorites", openByFavorites);
+                context.startActivity(myIntent);
+
+            }
+        });
+
         return convertView;
     }
+
+
 }

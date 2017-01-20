@@ -17,7 +17,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -90,6 +93,12 @@ public class MainActivity extends FragmentActivity {
     String allTitles;
     String[] allTitlesSplited;
 
+    // Novos Efeitos //
+    RelativeLayout searchLayout;
+    LinearLayout listFavoritesMoviesLayout;
+    RelativeLayout textFavoritesMoviesLayout;
+    ImageButton searchButton;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -127,6 +136,19 @@ public class MainActivity extends FragmentActivity {
         // Sempre setar o adapter //
         //favoritesList.setAdapter(adaptador);
 
+        searchLayout = (RelativeLayout)findViewById(R.id.searchLayout);
+        listFavoritesMoviesLayout = (LinearLayout)findViewById(R.id.listFavoritesMoviesLayout);
+        textFavoritesMoviesLayout = (RelativeLayout)findViewById(R.id.textFavoritesMoviesLayout);
+        searchButton = (ImageButton)findViewById(R.id.searchButton);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listFavoritesMoviesLayout.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.VISIBLE);
+                textFavoritesMoviesLayout.setVisibility(View.GONE);
+            }
+        });
 
         moviesListView = (ListView) findViewById(R.id.mainTable);
 
@@ -326,6 +348,11 @@ public class MainActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
 
+        // Desativo a secao de pesquisa //
+        searchLayout.setVisibility(View.GONE);
+        listFavoritesMoviesLayout.setVisibility(View.VISIBLE);
+        textFavoritesMoviesLayout.setVisibility(View.VISIBLE);
+
         // Variavel para receber um Shared Preferences //
         SharedPreferences pref2 = getSharedPreferences("MyPref", MODE_PRIVATE);
 
@@ -360,8 +387,10 @@ public class MainActivity extends FragmentActivity {
 
                 // Verifico se tem a Key dentro do Shared Preferences //
                 //if (pref2.contains("tt0268380")){
-                String resultTest = pref2.getString("tt0268380", null);
                 String folderTest = pref2.getString(allMoviesIDSplited[i] + "LinkImage", null);
+
+                String movieID = allMoviesIDSplited[i]; // o id do atual filme na Array
+                String description = pref2.getString(allMoviesIDSplited[i], null); // O nome do preference da descricao tem o nome do id
                 //Log.i("Descricao Salva: ", resultTest);
                 // Log.i("Descricao Salva: ", folderTest);
 
@@ -371,7 +400,7 @@ public class MainActivity extends FragmentActivity {
                 //////////////////////////////////
 
                 // Criando e adicionando um item na lista somente para Teste //
-                FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i]); // Preciso fazer a array de Titulos
+                FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i], movieID, description); // Preciso fazer a array de Titulos
                 lista.add(filme);
                 ///////////////////////////////////////////////////////////////
 
@@ -389,6 +418,15 @@ public class MainActivity extends FragmentActivity {
 
             }
 
+        }
+        else{
+
+                // Setando a lista vazia mesmo procedimento porem a lista foi limpa porque o usuario deletou todos os filmes da coleção //
+                AdapterFavorites adapterFavorites = new AdapterFavorites(this, lista);
+                favoritesList = (ListView) findViewById(R.id.mainTable2);
+                lista.clear();
+                favoritesList.setAdapter(adapterFavorites);
+                adapterFavorites.notifyDataSetChanged();
         }
 
 

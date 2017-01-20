@@ -4,21 +4,28 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGrayBackground"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"> <!-- Nao esquecer da orientacao -->
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <!--
+    <TextView
+        android:id="@+id/textMyMovies"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorGrayBackground"
-        android:paddingTop="10dp"
-        >
+        android:paddingTop="15dp"
+        android:text="Meus Filmes"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/colorVerdelimao"
+        android:textSize="24sp"/>   Texto sempre trabalha com sp -->
 
-
-        <!--
-        android:imeOptions="actionDone" // Adiciona o botao OK no teclado nativo
-        android:inputType="text" // Modifica o tipo de input para texto, assim ele mantem em linha reta (Pode ser usado para senha)
-        -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/searchLayout"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/colorPrimaryDark">
 
         <EditText
             android:id="@+id/searchField"
@@ -35,30 +42,9 @@
             android:textCursorDrawable="@color/colorVerdelimao"
             />
 
-    </RelativeLayout>
-
-    <!--
-    <TextView
-        android:id="@+id/textMyMovies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:text="Meus Filmes"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/colorVerdelimao"
-        android:textSize="24sp"/>   Texto sempre trabalha com sp -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="215dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/colorPrimaryDark">
-
    <ListView
        android:id="@+id/mainTable"
-
+       android:layout_marginTop="25dp"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:background="@color/colorPrimaryDark">
@@ -68,6 +54,12 @@
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textFavoritesMoviesLayout">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,21 +67,35 @@
         android:gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:textSize="20dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@color/colorVerdelimao"/>
+        android:textSize="30sp"
+        android:textColor="@color/colorVerdelimao"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/textView" />
+
+        <ImageButton
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@mipmap/serchicon"
+            android:id="@+id/searchButton"
+            android:layout_marginEnd="13dp"
+            android:layout_centerVertical="true"
+            android:layout_alignEnd="@+id/textView" />
+
+    </RelativeLayout>
+
 
         <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"    >
+        android:layout_height="wrap_content"
+        android:id="@+id/listFavoritesMoviesLayout">
 
             <ListView
-            android:id="@+id/mainTable2"
+                android:id="@+id/mainTable2"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
             </ListView>
 

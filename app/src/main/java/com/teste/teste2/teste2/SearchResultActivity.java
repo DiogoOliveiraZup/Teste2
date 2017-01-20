@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,7 +47,11 @@ public class SearchResultActivity extends AppCompatActivity {
     String title;
     String id;
 
+    String intentIMDBID;
+
     boolean isFavorite;
+
+    boolean openByFavorites;
 
     String allMoviesID;
     String allTitles;
@@ -60,8 +66,11 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Roda animação
         setContentView(R.layout.activity_search_result);
+
+
 
         // Solicitar permissao do usuario //
         ActivityCompat.requestPermissions(this,
@@ -86,6 +95,9 @@ public class SearchResultActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                else{
+                    removeFavorites();
+                }
             }
         });
 
@@ -98,20 +110,39 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intentMinuature = getIntent();
         String miniatureURL = intentMinuature.getStringExtra("posterURL");
         Context context = null;
-        Picasso.with(context).load(miniatureURL).into(miniatureMovie);
-        Picasso.with(context).load(miniatureURL).into(backgroundMovie);
+
+        Intent intent = getIntent();
+        openByFavorites = intent.getBooleanExtra("openByFavorites", openByFavorites);
+
+        if (!openByFavorites) {
+            Picasso.with(context).load(miniatureURL).into(miniatureMovie);
+            Picasso.with(context).load(miniatureURL).into(backgroundMovie);
+
+            // Recebe a variavel da activity anterior
+
+            result = intent.getStringExtra("resultSend"); //if it's a string you stored.
+            title = intent.getStringExtra("title");
+            id = intent.getStringExtra("imdbID");
+            Log.i("Title", title);
+            resultText.setText(result);
+        }
+        else{
+
+            // Recebe a variavel da activity anterior
+            result = intent.getStringExtra("description"); //if it's a string you stored.
+            id = intent.getStringExtra("posterLocalURL");
+            resultText.setText(result);
+            // Pegando o Arquivo de imagem do SD Card //
+            File f = new File(Environment.getExternalStorageDirectory() + File.separator + id + ".png");
+            Bitmap bmp = BitmapFactory.decodeFile(f.getAbsolutePath());
+            Log.i("Patch: ", f.getAbsolutePath().toString());
+            miniatureMovie.setImageBitmap(bmp);
+            backgroundMovie.setImageBitmap(bmp);
+            //////////////////////////////////
+
+        }
 
         getWindow().getAttributes().windowAnimations = R.style.Fade;
-
-        // Recebe a variavel da activity anterior
-        Intent intent = getIntent();
-        result = intent.getStringExtra("resultSend"); //if it's a string you stored.
-        title = intent.getStringExtra("title");
-        id = intent.getStringExtra("imdbID");
-
-        Log.i("Title", title);
-
-        resultText.setText(result);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -194,8 +225,57 @@ public class SearchResultActivity extends AppCompatActivity {
 
    }
 
+    void removeFavorites (){
+
+        manageFavorite.setBackgroundResource(R.mipmap.favorite);
+        isFavorite = false;
+
+        Intent intentID = getIntent();
+
+        if (!openByFavorites) {
+            String intentIMDBID = intentID.getStringExtra("imdbID");
+            allMoviesID = allMoviesID.replace(intentIMDBID + ",", "");
+            allTitles = allTitles.replace(title + ",", "");
+        }
+        else{
+            String intentIMDBID = intentID.getStringExtra("posterLocalURL");
+            allMoviesID = allMoviesID.replace(intentIMDBID + ",", "");
+            allTitles = allTitles.replace(title + ",", "");
+        }
+
+        SharedPreferences pref = getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("key_name4"); // will delete key key_name4
+        editor.commit(); // commit changes
+
+
+        Log.i("allMoviesIDSize", allMoviesID);
+
+        // Salvando valores //
+        // Recebe a variavel da activity anterior
+        Intent intent = getIntent();
+
+        editor.remove(intentIMDBID); // Removendo a chave com a descricao do filme
+
+        if (!allMoviesID.isEmpty()) {
+            editor.putString("allMoviesID", allMoviesID);
+            editor.putString("allTitles", allTitles);
+        }
+        else{
+            editor.remove("allMoviesID");
+            editor.remove("allTitles");
+        }
+        editor.commit(); // Sempre usar isso para salvar após uma alteração
+
+        //Log.i("ID Salvo: ", intentIMDBID);
+
+    }
+
     // Eu chamo essa funcao quando o Usuario tocar no botao de Favoritos //
     Bitmap manageFavorites() throws IOException {
+
+        manageFavorite.setBackgroundResource(R.mipmap.isfavorite);
+        isFavorite = true;
 
         Intent intentMinuature = getIntent();
         String miniatureURL = intentMinuature.getStringExtra("posterURL");
@@ -258,6 +338,7 @@ public class SearchResultActivity extends AppCompatActivity {
         // Recebe a variavel da activity anterior
         Intent intent = getIntent();
         String resultDescription = intent.getStringExtra("resultSend"); //if it's a string you stored.
+
         editor.putString(intentIMDBID, resultDescription); // Salvando a descrição do Filme //
 
         editor.putString("allMoviesID", allMoviesID + intentIMDBID + ",");

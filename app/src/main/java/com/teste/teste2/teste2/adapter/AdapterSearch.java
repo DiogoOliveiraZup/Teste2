@@ -159,10 +159,12 @@ public class AdapterSearch extends BaseAdapter {
 
                 // Enviado uma informação para a Activity qye vai ser carregada //
                     Intent myIntent = new Intent(context, SearchResultActivity.class);
+                    boolean openByFavorites = false;
                     myIntent.putExtra("resultSend", returnedText); //Optional parameters // Passar variavel para a outra activity
                     myIntent.putExtra("posterURL", movie.getPoster());
                     myIntent.putExtra("imdbID", movie.getImdbID());
                     myIntent.putExtra("title", movie.getTitle());
+                myIntent.putExtra("openByFavorites", openByFavorites);
                 context.startActivity(myIntent);
 
 

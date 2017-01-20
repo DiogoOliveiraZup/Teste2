@@ -14,7 +14,8 @@
         android:theme="@style/AppTheme"
         android:screenOrientation="portrait">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"> <!-- Full Screen  -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
