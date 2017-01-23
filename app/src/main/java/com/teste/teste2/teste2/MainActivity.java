@@ -9,10 +9,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,8 +38,9 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.teste.teste2.teste2.adapter.Adapter;
 import com.teste.teste2.teste2.adapter.AdapterFavorites;
 import com.teste.teste2.teste2.adapter.AdapterSearch;
-import com.teste.teste2.teste2.model.BaseTeste;
+import com.teste.teste2.teste2.adapter.CoverFlowAdapter;
 import com.teste.teste2.teste2.model.FavoritesInformations;
+import com.teste.teste2.teste2.model.Game;
 import com.teste.teste2.teste2.model.MovieInformations;
 import com.teste.teste2.teste2.model.MovieSearchInfomations;
 
@@ -55,6 +61,7 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 import cz.msebera.android.httpclient.Header;
+import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 import static com.teste.teste2.teste2.R.id.searchField;
 
@@ -99,6 +106,11 @@ public class MainActivity extends FragmentActivity {
     RelativeLayout textFavoritesMoviesLayout;
     ImageButton searchButton;
 
+
+    private FeatureCoverFlow coverFlow;
+    private CoverFlowAdapter adapter2;
+    private ArrayList<Game> games;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -111,6 +123,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); // Apontar para o XML da Acivity
 
+        coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+        coverFlow.setVisibility(View.GONE); // Esperando ter algum item para ser visivel caso seja visivel sem Item trava o app
+        //settingDummyData(); apenas para teste setando itens manuais na lista
+
+        //games = new ArrayList<>();
 
         // Parei aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii //
 
@@ -264,6 +281,37 @@ public class MainActivity extends FragmentActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
+        return new FeatureCoverFlow.OnScrollPositionListener() {
+            @Override
+            public void onScrolledToPosition(int position) {
+                Log.v("MainActiivty", "position: " + position);
+            }
+
+            @Override
+            public void onScrolling() {
+                Log.i("MainActivity", "scrolling");
+            }
+        };
+    }
+
+    private void settingDummyData() {
+        //games.add(new Game(R.mipmap.failed, "Assassin Creed 3"));
+        //games.add(new Game(R.mipmap.failed, "Avatar 3D"));
+        //games.add(new Game(R.mipmap.failed, "Call Of Duty Black Ops 3"));
+        //games.add(new Game(R.mipmap.failed, "DotA 2"));
+        //games.add(new Game(R.mipmap.failed, "Halo 5"));
+        //games.add(new Game(R.mipmap.failed, "Left 4 Dead 2"));
+       // games.add(new Game(R.mipmap.failed, "StarCraft"));
+       // games.add(new Game(R.mipmap.failed, "The Witcher 3"));
+       // games.add(new Game(R.mipmap.failed, "Tom raider 3"));
+       // games.add(new Game(R.mipmap.failed, "Need for Speed Most Wanted"));
+
+        adapter2 = new CoverFlowAdapter(this, games);
+        coverFlow.setAdapter(adapter2);
+        coverFlow.setOnScrollPositionListener(onScrollListener());
+    }
+
     public void finishedInputMovie(){
 
             String movieDigited;
@@ -379,10 +427,12 @@ public class MainActivity extends FragmentActivity {
 
         // Criando uma variável da minha lista //
         ArrayList<FavoritesInformations> lista = new ArrayList<>();
+        games = new ArrayList<>();
 
         if (allMoviesIDHaveValue) {
 
             for (int i = 0; i < allMoviesIDSplited.length; i++) {
+
 
 
                 // Verifico se tem a Key dentro do Shared Preferences //
@@ -403,6 +453,16 @@ public class MainActivity extends FragmentActivity {
                 FavoritesInformations filme = new FavoritesInformations(bmp, allTitlesSplited[i], movieID, description); // Preciso fazer a array de Titulos
                 lista.add(filme);
                 ///////////////////////////////////////////////////////////////
+
+                // Criando e adicionando um item na lista somente para Teste //
+                Game filme2 = new Game(bmp, allTitlesSplited[i]); // Preciso fazer a array de Titulos
+                games.add(filme2);
+                coverFlow.setVisibility(View.VISIBLE);
+                ///////////////////////////////////////////////////////////////
+
+                adapter2 = new CoverFlowAdapter(this, games);
+                coverFlow.setAdapter(adapter2);
+                coverFlow.setOnScrollPositionListener(onScrollListener());
 
                 // Criando uma variável do meu adapter e setando o contexto e a lista completa no meu ListView //
                 AdapterFavorites adapterFavorites = new AdapterFavorites(this, lista);
@@ -552,7 +612,5 @@ public class MainActivity extends FragmentActivity {
         }
 
         }
-
-
 }
 

@@ -37,4 +37,9 @@ dependencies {
     // Picaso to Image //
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.github.moondroid.coverflow:library:1.0'
+    compile 'com.android.support:cardview-v7:23.0.1'
+
 }
